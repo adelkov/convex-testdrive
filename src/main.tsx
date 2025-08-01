@@ -3,13 +3,21 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { ClerkProvider } from "@clerk/clerk-react";
 
 const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL as string);
 
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+if (!PUBLISHABLE_KEY) {
+  throw new Error("Missing Clerk Publishable Key");
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ConvexProvider client={convex}>
-      <App />
-    </ConvexProvider>
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+      <ConvexProvider client={convex}>
+        <App />
+      </ConvexProvider>
+    </ClerkProvider>
   </StrictMode>
 )
