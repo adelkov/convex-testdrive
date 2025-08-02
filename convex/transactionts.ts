@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { query } from "./_generated/server";
+import { query, mutation } from "./_generated/server";
 import { Doc } from "./_generated/dataModel";
 import { transactionFields } from "./schema";
 
@@ -187,3 +187,141 @@ function getNextMonth(month: string): string {
     return `${nextYear}-${formattedMonth}-01`;
   }
 }
+
+/**
+ * Create sample transaction data for testing (run this once to populate data)
+ */
+export const createSampleData = mutation({
+  args: {},
+  returns: v.number(),
+  handler: async (ctx) => {
+    const sampleTransactions = [
+      // December 2024
+      {
+        created_at: "2024-12-15 10:30:00",
+        created_on: "2024-12-15",
+        direction: "IN" as const,
+        exchange_rate: 1.0,
+        expenditure_category: null,
+        finished_on: "2024-12-15",
+        id: 1001,
+        is_net: 1.0,
+        reference: "SALARY-DEC-2024",
+        source_amount: 5000.0,
+        source_amount_in_default_currency: 5000.0,
+        source_currency: "USD" as const,
+        source_name: "ACME Corp",
+        status: "COMPLETED" as const,
+        target_amount: 5000.0,
+        target_amount_in_default_currency: 5000.0,
+        target_currency: "USD" as const,
+        target_name: "My Account",
+        transaction_id: "TX-DEC-001",
+        updated_at: "2024-12-15 10:30:00",
+        user_id: 123,
+      },
+      {
+        created_at: "2024-12-10 14:20:00",
+        created_on: "2024-12-10",
+        direction: "OUT" as const,
+        exchange_rate: 1.0,
+        expenditure_category: "INFRASTRUCTURE" as const,
+        finished_on: "2024-12-10",
+        id: 1002,
+        is_net: 1.0,
+        reference: "AWS-HOSTING",
+        source_amount: 150.0,
+        source_amount_in_default_currency: 150.0,
+        source_currency: "USD" as const,
+        source_name: "My Account",
+        status: "COMPLETED" as const,
+        target_amount: 150.0,
+        target_amount_in_default_currency: 150.0,
+        target_currency: "USD" as const,
+        target_name: "Amazon Web Services",
+        transaction_id: "TX-DEC-002",
+        updated_at: "2024-12-10 14:20:00",
+        user_id: 123,
+      },
+      // November 2024
+      {
+        created_at: "2024-11-25 09:15:00",
+        created_on: "2024-11-25",
+        direction: "IN" as const,
+        exchange_rate: 1.0,
+        expenditure_category: null,
+        finished_on: "2024-11-25",
+        id: 1003,
+        is_net: 1.0,
+        reference: "CLIENT-PAYMENT",
+        source_amount: 2500.0,
+        source_amount_in_default_currency: 2500.0,
+        source_currency: "USD" as const,
+        source_name: "Client XYZ",
+        status: "COMPLETED" as const,
+        target_amount: 2500.0,
+        target_amount_in_default_currency: 2500.0,
+        target_currency: "USD" as const,
+        target_name: "My Account",
+        transaction_id: "TX-NOV-001",
+        updated_at: "2024-11-25 09:15:00",
+        user_id: 123,
+      },
+      {
+        created_at: "2024-11-20 16:45:00",
+        created_on: "2024-11-20",
+        direction: "OUT" as const,
+        exchange_rate: 1.0,
+        expenditure_category: "MARKETING" as const,
+        finished_on: "2024-11-20",
+        id: 1004,
+        is_net: 1.0,
+        reference: "GOOGLE-ADS",
+        source_amount: 300.0,
+        source_amount_in_default_currency: 300.0,
+        source_currency: "USD" as const,
+        source_name: "My Account",
+        status: "COMPLETED" as const,
+        target_amount: 300.0,
+        target_amount_in_default_currency: 300.0,
+        target_currency: "USD" as const,
+        target_name: "Google Ads",
+        transaction_id: "TX-NOV-002",
+        updated_at: "2024-11-20 16:45:00",
+        user_id: 123,
+      },
+      // October 2024
+      {
+        created_at: "2024-10-30 11:00:00",
+        created_on: "2024-10-30",
+        direction: "OUT" as const,
+        exchange_rate: 1.0,
+        expenditure_category: "LEGAL" as const,
+        finished_on: "2024-10-30",
+        id: 1005,
+        is_net: 1.0,
+        reference: "LEGAL-CONSULTATION",
+        source_amount: 800.0,
+        source_amount_in_default_currency: 800.0,
+        source_currency: "USD" as const,
+        source_name: "My Account",
+        status: "COMPLETED" as const,
+        target_amount: 800.0,
+        target_amount_in_default_currency: 800.0,
+        target_currency: "USD" as const,
+        target_name: "Law Firm ABC",
+        transaction_id: "TX-OCT-001",
+        updated_at: "2024-10-30 11:00:00",
+        user_id: 123,
+      }
+    ];
+
+    let count = 0;
+    for (const transaction of sampleTransactions) {
+      await ctx.db.insert("transactions", transaction);
+      count++;
+    }
+
+    return count;
+  },
+});
